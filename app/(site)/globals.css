@@ -63,7 +63,7 @@ html.show-loader [data-intro] { opacity: 0; transform: translateY(18px); }
 /* ---------- sections: light middle on a 6-column grid ---------- */
 .light { position: relative; background: var(--paper); }
 .light::before {
-  content: ""; position: absolute; inset: 0 var(--gutter); pointer-events: none;
+  content: ""; position: absolute; inset: 0 calc(var(--gutter) / 2); pointer-events: none; /* outer lines sit in the margin, clear of the text edges */
   background: repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px calc(100% / 6));
   border-right: 1px solid var(--grid); z-index: 0;
 }
