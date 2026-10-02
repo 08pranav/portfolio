@@ -1,0 +1,19 @@
+.cursor {
+  position: fixed; left: 0; top: 0; z-index: 90; pointer-events: none; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+  border-radius: 50%; background: #fff; border: 1.5px solid #fff; mix-blend-mode: difference; display: grid; place-items: center;
+  font-size: 12px; font-weight: 600; color: #000;
+  transition: width .4s var(--ease), height .4s var(--ease), margin .4s var(--ease), opacity .3s, background .3s;
+  opacity: 0;
+}
+.on { opacity: 1; }
+.big { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
+.label { opacity: 0; transition: opacity .2s; white-space: nowrap; }
+.big .label { opacity: 1; }
+.ring {
+  width: var(--rs, 200px); height: var(--rs, 200px); margin: calc(var(--rs, 200px) / -2) 0 0 calc(var(--rs, 200px) / -2);
+  background: transparent; border-style: dashed; border-width: 1px;
+}
+.ring::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+.spin { animation: spin .8s var(--ease); }
+@keyframes spin { to { rotate: 180deg; } }
+@media (hover: none) { .cursor { display: none; } }

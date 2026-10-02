@@ -1,0 +1,51 @@
+/* difference blend keeps it readable on the dark hero and the light pages */
+.nav {
+  position: fixed; inset: 0 0 auto; z-index: 40; height: calc(var(--navh) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) var(--gutter) 0; display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 16px; color: var(--chalk);
+  transition: transform .5s var(--ease), background .4s, color .4s;
+}
+.solid {
+  background: color-mix(in srgb, var(--paper) 80%, transparent); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); color: var(--ink);
+}
+.hide { transform: translateY(-110%); }
+.logo {
+  font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; font-size: 24px;
+  letter-spacing: .01em; text-transform: uppercase;
+}
+.links { display: flex; gap: clamp(12px, 2vw, 28px); font-size: 14px; }
+.right { display: flex; justify-content: flex-end; align-items: center; gap: 18px; font-size: 14px; }
+.status { display: flex; align-items: center; gap: 8px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 var(--live); animation: pulse 2.2s infinite; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 60%, transparent); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.nbtn { all: unset; cursor: pointer; }
+.nbtn:focus-visible { outline: 1.5px solid currentColor; outline-offset: 3px; }
+.menuBtn { display: none; }
+
+/* mobile menu */
+.menu {
+  position: fixed; inset: 0; z-index: 80; background: var(--night); color: var(--chalk); display: flex;
+  flex-direction: column; justify-content: space-between;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) var(--gutter) calc(20px + env(safe-area-inset-bottom, 0px));
+}
+.menu[hidden] { display: none !important; }
+.menuTop { display: flex; justify-content: space-between; align-items: center; height: 40px; }
+.menuLinks a {
+  display: flex; align-items: baseline; gap: 14px; overflow: hidden; font-size: clamp(48px, 15vw, 92px);
+  line-height: 1.05; border-bottom: 1px solid var(--night-rule); padding-block: 4px;
+}
+.menuLinks a span { display: inline-block; }
+.menuLinks a :global(.mono) { font-size: 11px; color: var(--chalk-2); }
+.menu :global(.mono) { color: var(--chalk-2); }
+.menuFoot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .links, .status { display: none; }
+  .menuBtn { display: inline-block; }
+  .nav { grid-template-columns: 1fr auto; }
+}

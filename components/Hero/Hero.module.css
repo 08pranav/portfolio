@@ -1,0 +1,98 @@
+/* hero: an editorial cover. Follows the page theme (--night/--chalk flip with light and dark). */
+.hero {
+  position: relative; transition: background .5s, color .5s; background: var(--night); color: var(--chalk);
+  height: clamp(640px, 100svh, 1000px); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden;
+}
+.hero :global(.mono) { color: var(--chalk-2); }
+.issue {
+  display: flex; justify-content: space-between; gap: 16px; padding: calc(var(--navh) + 2px) var(--gutter) 10px;
+  border-bottom: 1px solid var(--night-rule); position: relative; z-index: 4;
+}
+.stage { position: relative; min-height: 0; }
+.wm {
+  position: absolute; left: var(--gutter); right: var(--gutter); top: clamp(10px, 1.4vw, 22px); margin: 0; text-align: center;
+  font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; text-transform: uppercase;
+  font-size: var(--wmfs, 28vw); line-height: .76; letter-spacing: -.004em; white-space: nowrap; z-index: 1; color: var(--chalk);
+}
+.ln { display: inline-block; overflow: hidden; vertical-align: top; padding-top: .02em; }
+.l { display: inline-block; will-change: transform; }
+
+.portrait {
+  position: absolute; left: 50%; bottom: 0; translate: -50% 0; z-index: 2; height: var(--ph, 74%); aspect-ratio: var(--par, 1.5453);
+  max-width: 100vw; -webkit-tap-highlight-color: transparent; outline: none;
+}
+.portrait:focus-visible .tilt { outline: 1.5px dashed var(--chalk-2); outline-offset: -6px; }
+.tilt {
+  position: absolute; inset: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent 100%), linear-gradient(0deg, transparent 0, #000 6%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent 100%), linear-gradient(0deg, transparent 0, #000 6%);
+  mask-composite: intersect;
+}
+.stack { position: absolute; inset: 0; }
+.stack img { visibility: hidden; user-select: none; -webkit-user-drag: none; }
+.stack img.on { visibility: visible; }
+
+/* cover lines: what's inside, like the front of a magazine */
+.covers {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; display: flex; justify-content: space-between;
+  align-items: flex-end; padding: 0 var(--gutter) clamp(18px, 4vh, 40px);
+}
+.col { display: flex; flex-direction: column; gap: clamp(16px, 2.6vh, 28px); width: clamp(190px, 17vw, 250px); }
+.cover {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; row-gap: 4px; align-items: start;
+  border-top: 1px solid var(--night-rule); padding-top: 10px; pointer-events: auto;
+}
+.cover > :global(.mono) { grid-column: 1 / -1; }
+.cover > .num { grid-row: 2 / 4; }
+.cover > p, .cover > a { grid-column: 2; }
+.cover:not(:has(.num)) > p, .cover:not(:has(.num)) > a { grid-column: 1 / -1; }
+.num {
+  font-family: var(--serif); font-style: italic; font-weight: 300; font-variation-settings: 'opsz' 144;
+  font-size: clamp(40px, 3.6vw, 58px); line-height: .85; letter-spacing: -.02em;
+}
+.cover p { margin: 0; font-size: clamp(13px, 1vw, 15px); line-height: 1.35; color: var(--chalk); }
+.cover a { align-self: flex-start; font-size: 13px; color: var(--chalk-2); transition: color .3s; }
+.cover a:hover { color: var(--chalk); }
+.cover a:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 3px; }
+.live {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--live); margin-right: 8px;
+  vertical-align: middle; box-shadow: 0 0 0 4px rgba(59, 178, 115, .18);
+}
+.rot { display: block; min-height: 2.7em; transition: opacity .45s; }
+.out { opacity: 0; }
+
+.foot {
+  display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 12px var(--gutter) 14px;
+  border-top: 1px solid var(--night-rule); position: relative; z-index: 4; background: var(--night);
+}
+.foot p { margin: 0; font-size: 15px; color: var(--chalk); max-width: 62ch; }
+.foot :global(.it) { font-size: 1.08em; }
+.scrollhint { display: flex; align-items: center; gap: 10px; flex: none; }
+.scrollhint i { display: block; width: 1px; height: 22px; background: var(--night-rule); position: relative; overflow: hidden; }
+.scrollhint i::after {
+  content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--chalk);
+  animation: drip 1.8s var(--ease) infinite;
+}
+@keyframes drip { to { top: 100%; } }
+
+@media (max-width: 860px) {
+  .hero { height: auto; grid-template-rows: auto auto auto; }
+  .issue span:nth-child(2) { display: none; }
+  .stage { padding-top: 14px; }
+  .wm { position: relative; left: auto; right: auto; top: auto; padding-inline: var(--gutter); }
+  .portrait {
+    position: relative; left: auto; translate: none; height: auto; width: 100%; max-width: 100%;
+    margin-top: calc(var(--wmfs, 28vw) * -.36);
+  }
+  .covers {
+    position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px;
+    padding: 18px var(--gutter) 22px;
+  }
+  .col { display: contents; }
+  .cover { grid-template-columns: minmax(0, 1fr); }
+  .cover > .num { grid-row: auto; }
+  .cover > p, .cover > a { grid-column: 1; }
+  .foot { flex-direction: column; align-items: flex-start; }
+  .scrollhint { display: none; }
+}

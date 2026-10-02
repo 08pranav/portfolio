@@ -1,0 +1,12 @@
+.loader {
+  position: fixed; inset: 0; z-index: 100; background: var(--night); color: var(--chalk); display: none;
+  align-items: flex-end; justify-content: space-between;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) var(--gutter) calc(20px + env(safe-area-inset-bottom, 0px));
+}
+:global(.js) .loader { display: flex; }
+.count {
+  font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; font-size: clamp(96px, 22vw, 300px);
+  line-height: .78; font-variant-numeric: tabular-nums;
+}
+.loader :global(.mono) { color: var(--chalk-2); padding-bottom: .6em; }
+@media (prefers-reduced-motion: reduce) { :global(.js) .loader { display: none; } }
