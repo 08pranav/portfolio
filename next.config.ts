@@ -5,6 +5,8 @@ const sanityProject = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // the round logo Next shows in the corner while developing
+  devIndicators: false,
   images: {
     qualities: [75, 90],
     // images uploaded in the Studio come from Sanity's CDN, limited to this project's files

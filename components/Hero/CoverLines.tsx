@@ -40,7 +40,7 @@ export default function CoverLines({ lines, currentlyLines, status, visibleTarge
   const columns = [lines.slice(0, split), lines.slice(split)];
 
   return (
-    <div className={styles.covers}>
+    <div className={styles.covers} data-covers>
       {columns.map((col, c) => (
         <div className={styles.col} key={c}>
           {col.map((line) => (

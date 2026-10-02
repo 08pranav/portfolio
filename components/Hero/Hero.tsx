@@ -35,16 +35,34 @@ export default function Hero({ hero, fullName, status, visibleTargets }: Props) 
       const w = wm.current!, p = portrait.current!, s = stage.current!;
       fitWidth(w, ln.current!, w, "--wmfs");
       if (innerWidth > 860) {
+        // The cover columns sit at the bottom corners. If the window is short for its width, the fitted masthead is
+        // tall enough to run into them, so let the stage grow until the columns clear the letters.
+        s.style.minHeight = "";
+        const lettersBottom = w.offsetTop + ln.current!.offsetTop + ln.current!.offsetHeight;
+        const covers = s.querySelector<HTMLElement>("[data-covers]");
+        const colHeight = Math.max(0, ...[...(covers?.children ?? [])].map((c) => (c as HTMLElement).offsetHeight));
+        const bottomPad = covers ? parseFloat(getComputedStyle(covers).paddingBottom) : 0;
+        s.style.minHeight = `${Math.ceil(lettersBottom + 16 + colHeight + bottomPad)}px`;
+
         const capH = w.getBoundingClientRect().height;
         let ph = s.clientHeight - (w.offsetTop + capH * 0.46);
         ph = Math.min(ph, innerWidth / Number(p.dataset.ratio || 1.5453));
         p.style.setProperty("--ph", `${Math.max(240, ph)}px`);
-      } else p.style.removeProperty("--ph");
+      } else {
+        s.style.minHeight = "";
+        p.style.removeProperty("--ph");
+      }
     };
     layout();
     addEventListener("resize", layout);
     document.fonts?.ready.then(layout);
-    return () => removeEventListener("resize", layout);
+    // edited cover text (live in the admin) changes the column heights, so fit again
+    const observer = new ResizeObserver(layout);
+    stage.current!.querySelectorAll("[data-covers] > *").forEach((col) => observer.observe(col));
+    return () => {
+      removeEventListener("resize", layout);
+      observer.disconnect();
+    };
   }, []);
 
   /* on scroll the portrait sinks and the name drifts up and dims; the portrait tilts toward the pointer */
