@@ -4,6 +4,7 @@ import path from "node:path";
 const sanityProject = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
     qualities: [75, 90],
     // images uploaded in the Studio come from Sanity's CDN, limited to this project's files

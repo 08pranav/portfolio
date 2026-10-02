@@ -8,6 +8,7 @@ import MotionProvider from "@/components/providers/MotionProvider";
 import SiteConfigProvider from "@/components/providers/SiteConfigProvider";
 import { CONTENT_TAG, getContent } from "@/sanity/lib/content";
 import { live } from "@/sanity/lib/live";
+import { siteUrl } from "@/lib/site-url";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
 
@@ -35,13 +36,22 @@ const martianMono = Martian_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getContent();
-  const { title, description, shareImage, favicon } = site.seo;
+  const { title, titleTemplate, description, favicon } = site.seo;
   return {
-    title,
+    metadataBase: new URL(siteUrl()),
+    // home page reads `title`; every other page (and the admin) reads the template, e.g. "Admin — Pranav Koradiya"
+    title: { default: title, template: titleTemplate },
     description,
-    openGraph: { title, description, type: "website", images: shareImage ? [{ url: shareImage.url, width: shareImage.width, height: shareImage.height, alt: shareImage.alt }] : undefined },
-    twitter: { card: shareImage ? "summary_large_image" : "summary", title, description, images: shareImage ? [shareImage.url] : undefined },
-    icons: favicon ? { icon: favicon.url } : undefined,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: site.fullName,
+      images: [{ url: "/share.png", width: 1200, height: 630, alt: site.fullName }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: ["/share.png"] },
+    // no custom icon uploaded: the built-in PK icons (app/icon.svg, favicon.ico, apple-icon.png) apply
+    icons: favicon ? { icon: "/site-icon" } : undefined,
   };
 }
 
@@ -68,7 +78,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script dangerouslySetInnerHTML={{ __html: themeScript(site.defaultTheme) }} />
       </head>
       <body>
-        <SiteConfigProvider timeZone={site.timeZone}>
+        <SiteConfigProvider timeZone={site.timeZone} titleTemplate={site.seo.titleTemplate}>
           <MotionProvider>{children}</MotionProvider>
         </SiteConfigProvider>
         {live ? (

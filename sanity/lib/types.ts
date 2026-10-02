@@ -32,7 +32,7 @@ export type SiteSettings = {
   socials: { platform: SocialPlatform; url: string; label?: string }[];
   resume: { url?: string; updatedAt?: string; pages?: number };
   defaultTheme: "system" | "light" | "dark";
-  seo: { title: string; description: string; shareImage?: ImageRef; favicon?: ImageRef };
+  seo: { title: string; titleTemplate: string; description: string; shareImage?: ImageRef; favicon?: ImageRef };
 };
 
 export type Navigation = {

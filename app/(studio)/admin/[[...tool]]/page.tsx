@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { isSanityConfigured } from "@/sanity/env";
+import { getContent } from "@/sanity/lib/content";
 import Studio from "./Studio";
 
-export const dynamic = "force-static";
-
-export default function AdminPage() {
+export default async function AdminPage() {
   if (!isSanityConfigured) {
     return (
       <main style={{ maxWidth: 560, margin: "15vh auto", padding: 24, font: "16px/1.5 system-ui, sans-serif" }}>
@@ -19,5 +18,6 @@ export default function AdminPage() {
       </main>
     );
   }
-  return <Studio />;
+  const { site } = await getContent();
+  return <Studio title={site.seo.titleTemplate.replace("%s", "Admin")} />;
 }

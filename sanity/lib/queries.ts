@@ -23,7 +23,7 @@ export const CONTENT_QUERY = defineQuery(`{
     "socials": socials[]{ platform, url, label },
     "resume": { "url": resume.file.asset->url, "updatedAt": resume.updatedAt, "pages": resume.pages },
     defaultTheme,
-    "seo": { "title": seo.title, "description": seo.description, "shareImage": seo.shareImage${IMG}, "favicon": seo.favicon${IMG} }
+    "seo": { "title": seo.title, "titleTemplate": seo.titleTemplate, "description": seo.description, "shareImage": seo.shareImage${IMG}, "favicon": seo.favicon${IMG} }
   },
   "navigation": *[_type == "navigation"][0]{
     "links": links[]{ label, target }, menuFooterLeft, menuFooterRight, labels

@@ -44,5 +44,6 @@ Names only; set the values in `.env.local` and in the Vercel project settings.
 | `SANITY_API_WRITE_TOKEN` | Optional: saving contact notes to the admin inbox |
 | `SANITY_REVALIDATE_SECRET` | Verifies the Sanity webhook at `/api/revalidate` |
 | `NEXT_PUBLIC_WEB3FORMS_KEY` | Sends contact form notes to my email |
+| `NEXT_PUBLIC_SITE_URL` | Optional: the public address (e.g. my custom domain), used for link-preview images |
 
 With no Sanity project configured the site still builds and renders its built-in skeleton.

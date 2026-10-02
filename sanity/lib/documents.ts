@@ -36,7 +36,7 @@ export function siteSettingsDoc() {
     // empty `url` = a TODO to fill in the Studio; Sanity accepts the document, the Studio flags the field
     socials: d.site.socials.map((s) => ({ _type: "social", ...s })),
     resume: { updatedAt: resume.updatedAt, pages: resume.pages },
-    seo: { title: seo.title, description: seo.description },
+    seo: { title: seo.title, titleTemplate: seo.titleTemplate, description: seo.description },
   });
 }
 

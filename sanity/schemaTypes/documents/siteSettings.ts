@@ -149,19 +149,31 @@ export default defineType({
       description: "How the site looks in Google results, browser tabs and link previews.",
       options: { collapsible: false },
       fields: [
-        str("title", "Site title", "The text in the browser tab and the headline in search results.", { required: true, max: 60 }),
+        str("title", "Home page title", "The text in the browser tab on the home page, and the headline in search results and link previews.", { required: true, max: 60 }),
+        defineField({
+          name: "titleTemplate",
+          title: "Title template for other pages",
+          type: "string",
+          description: "How the tab reads on every other page, including each project when it is open. Write %s where the page name goes, e.g. “%s — Pranav Koradiya” gives “Admin — Pranav Koradiya”.",
+          initialValue: "%s — Pranav Koradiya",
+          validation: (rule) =>
+            rule
+              .required()
+              .max(70)
+              .custom((value) => (!value || value.includes("%s") ? true : "Include %s where the page name should appear.")),
+        }),
         txt("description", "Description", "One or two sentences under the headline in search results and link previews.", { required: true, max: 160 }),
         defineField({
           name: "shareImage",
           title: "Share image",
           type: "image",
-          description: "The picture shown when the link is shared on WhatsApp, LinkedIn, X and similar. 1200 × 630 pixels works best.",
+          description: "The picture shown when the link is shared on WhatsApp, LinkedIn, X and similar. Use exactly 1200 × 630 pixels; other shapes are cropped to fit.",
         }),
         defineField({
           name: "favicon",
           title: "Favicon",
           type: "image",
-          description: "The small icon in the browser tab. A square PNG, at least 64 × 64 pixels.",
+          description: "Optional. Leave empty to use the built-in PK icon, which adapts to light and dark browser tabs. Upload a square PNG (at least 64 × 64) only to replace it.",
           options: { accept: "image/png,image/svg+xml,image/x-icon" },
         }),
       ],

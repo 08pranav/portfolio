@@ -44,6 +44,7 @@ export function resolveContent(raw: Raw): SiteContent {
       resume: site.resume ?? {},
       seo: {
         ...site.seo,
+        titleTemplate: site.seo?.titleTemplate || defaults.site.seo.titleTemplate,
         shareImage: hasUrl(site.seo?.shareImage) ? site.seo.shareImage : undefined,
         favicon: hasUrl(site.seo?.favicon) ? site.seo.favicon : undefined,
       },

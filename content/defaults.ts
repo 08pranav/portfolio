@@ -71,6 +71,7 @@ function applySeed(seed: Seed): SiteContent {
       socials: s.socials.map((x) => ({ platform: x.platform as SiteContent["site"]["socials"][number]["platform"], url: text(x.url) })),
       seo: {
         title: s.name,
+      titleTemplate: `%s — ${s.name}`,
         description: `Portfolio of ${s.name}, B.Tech Computer Engineering student at Fr. CRCE, Mumbai. Web, mobile and Ethereum projects, and Project Cell leadership.`,
       },
     },

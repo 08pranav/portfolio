@@ -37,7 +37,7 @@ export const base: SiteContent = {
     socials: [],
     resume: {},
     defaultTheme: "system",
-    seo: { title: "", description: "" },
+    seo: { title: "Pranav Koradiya", titleTemplate: "%s — Pranav Koradiya", description: "" },
   },
 
   navigation: {
