@@ -1,0 +1,48 @@
+/* The note form. Sits on the dark (night) bookend, so it uses the --night/--chalk tokens. */
+.wrap { color: var(--chalk); }
+.wrap :global(.mono) { color: var(--chalk-2); }
+.form { display: flex; flex-direction: column; gap: 22px; }
+.form h3 { margin: 0; font-size: clamp(24px, 2.4vw, 34px); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; }
+.fld { display: flex; flex-direction: column; gap: 6px; }
+.fld label { font-size: 13px; color: var(--chalk-2); }
+.fld input, .fld textarea {
+  font-size: 17px; color: var(--chalk); background: transparent; border: 0; border-bottom: 1px solid var(--night-rule);
+  padding: 8px 0; border-radius: 0; outline: none; transition: border-color .3s; width: 100%;
+}
+.fld textarea { resize: vertical; min-height: 96px; line-height: 1.45; }
+.fld textarea::placeholder { color: var(--chalk-2); opacity: .8; }
+.fld input:focus, .fld textarea:focus { border-color: var(--chalk); }
+/* a visible focus indicator: the underline thickens to 2px in full contrast */
+.fld input:focus-visible, .fld textarea:focus-visible { outline: none; box-shadow: 0 1px 0 0 var(--chalk); }
+.err { font-size: 12px; color: var(--err); }
+.bad input, .bad textarea { border-color: var(--err); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; border: 0; padding: 0; margin: 0; min-width: 0; }
+.chips legend { font-size: 13px; color: var(--chalk-2); margin-bottom: 10px; padding: 0; }
+.chips label { cursor: pointer; }
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips span {
+  display: inline-block; border: 1px solid var(--night-rule); border-radius: 99px; padding: 7px 14px; font-size: 14px;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.chips input:checked + span { background: var(--chalk); color: var(--night); border-color: var(--chalk); }
+.chips input:focus-visible + span { outline: 1.5px solid var(--chalk); outline-offset: 2px; }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.send {
+  all: unset; box-sizing: border-box; cursor: pointer; background: var(--chalk); color: var(--night); border-radius: 99px;
+  padding: 15px 26px; font-weight: 500; font-size: 16px; transition: transform .4s var(--ease);
+}
+.send:hover { transform: translateY(-2px); }
+.send:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 3px; }
+.send[disabled] { opacity: .6; cursor: progress; transform: none; }
+
+.done { display: flex; flex-direction: column; gap: 14px; border: 1px solid var(--night-rule); border-radius: 12px; padding: 28px; }
+.done h3 { margin: 0; font-size: clamp(28px, 3vw, 40px); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; }
+.done p { margin: 0; }
+.again { all: unset; cursor: pointer; font-size: 14px; align-self: flex-start; }
+.again:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 3px; }
+
+@media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
