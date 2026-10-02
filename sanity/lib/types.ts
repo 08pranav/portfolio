@@ -32,7 +32,21 @@ export type SiteSettings = {
   socials: { platform: SocialPlatform; url: string; label?: string }[];
   resume: { url?: string; updatedAt?: string; pages?: number };
   defaultTheme: "system" | "light" | "dark";
-  seo: { title: string; titleTemplate: string; description: string; shareImage?: ImageRef; favicon?: ImageRef };
+  errorPages: { notFoundTitle: string; notFoundBody: string; errorTitle: string; errorBody: string; homeLabel: string; retryLabel: string };
+  seo: {
+    title: string;
+    titleTemplate: string;
+    description: string;
+    keywords: string[];
+    /** e.g. https://pranavkoradiya.com, empty until a domain is set. */
+    canonicalDomain?: string;
+    shareImage?: ImageRef;
+    favicon?: ImageRef;
+    jobTitle: string;
+    alumniOf: string;
+    addressLocality: string;
+    addressCountry: string;
+  };
 };
 
 export type Navigation = {
@@ -82,6 +96,9 @@ export type MediaItem = {
 
 export type Project = {
   _id: string;
+  /** ISO timestamp of the last edit, used for the sitemap. */
+  updatedAt?: string;
+  seo?: { metaTitle?: string; metaDescription?: string; shareImage?: ImageRef };
   slug: string;
   year: string;
   title: string;
@@ -172,6 +189,8 @@ export type ContactSection = {
 };
 
 export type SiteContent = {
+  /** ISO timestamp of the most recent edit anywhere on the site. */
+  updatedAt?: string;
   site: SiteSettings;
   navigation: Navigation;
   layout: HomepageLayout;

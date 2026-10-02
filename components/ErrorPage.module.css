@@ -1,0 +1,13 @@
+.page {
+  min-height: 100svh; background: var(--night); color: var(--chalk); display: flex; flex-direction: column; justify-content: flex-end;
+  gap: clamp(20px, 3vw, 36px); padding: calc(var(--navh) + 24px) var(--gutter) clamp(40px, 6vw, 80px); overflow: hidden;
+}
+.code {
+  margin: 0; font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; text-transform: uppercase;
+  font-size: clamp(160px, 38vw, 560px); line-height: .76; letter-spacing: -.004em; user-select: none;
+}
+.copy { display: flex; flex-direction: column; gap: 14px; max-width: 56ch; border-top: 1px solid var(--night-rule); padding-top: clamp(16px, 2vw, 24px); }
+.title { margin: 0; font-size: clamp(34px, 4.6vw, 64px); line-height: .98; font-weight: 340; }
+.body { margin: 0; font-size: clamp(15px, 1.3vw, 18px); line-height: 1.45; color: var(--chalk-2); }
+.act { all: unset; cursor: pointer; align-self: flex-start; font-size: 15px; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.act:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 4px; }

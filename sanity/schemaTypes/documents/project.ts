@@ -23,6 +23,7 @@ export default defineType({
     { name: "content", title: "Details", default: true },
     { name: "media", title: "Gallery" },
     { name: "mock", title: "Placeholder look" },
+    { name: "seo", title: "SEO" },
   ],
   fields: [
     str("title", "Title", "The project name, shown large in the list and on the project page.", { group: "content", required: true, max: 40 }),
@@ -95,6 +96,24 @@ export default defineType({
       description: "Three words for the generated diagram placeholder: the front end, the back end, and the data store. Only used until a diagram image is uploaded.",
       of: [{ type: "string", validation: (rule) => rule.max(24) }],
       validation: (rule) => rule.max(3),
+    }),
+    defineField({
+      name: "seo",
+      title: "Search and sharing",
+      type: "object",
+      group: "seo",
+      description: "How this project appears in Google and in shared links. Anything left empty falls back to the project's own title, description and first image.",
+      options: { collapsible: false },
+      fields: [
+        str("metaTitle", "Page title", "The tab title and search headline. Leave empty to use the project name. The site name is added for you, e.g. “ParkWise — Pranav Koradiya”.", { max: 60 }),
+        txt("metaDescription", "Page description", "The summary under the headline in search results. Leave empty to use the project description.", { rows: 3, max: 160 }),
+        defineField({
+          name: "shareImage",
+          title: "Share image",
+          type: "imageWithAlt",
+          description: "Optional. The picture shown when this project's link is shared. Use exactly 1200 × 630 pixels. Leave empty and a card is made for you from the PRANAV. masthead and the project name.",
+        }),
+      ],
     }),
     bool("isHidden", "Hide this project", "On keeps the project in the Studio but removes it from the site.", { group: "content", initialValue: false }),
   ],

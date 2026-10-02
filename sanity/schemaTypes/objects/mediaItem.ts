@@ -30,9 +30,8 @@ export default defineType({
     defineField({
       name: "image",
       title: "Image file",
-      type: "image",
-      description: "The screenshot or diagram. If you leave this empty the site shows a generated placeholder instead.",
-      options: { hotspot: true },
+      type: "imageWithAlt",
+      description: "The screenshot or diagram, with a description of what it shows. If you leave this empty the site shows a generated placeholder instead.",
       hidden: ({ parent }) => !FILE_TYPES.includes(parent?.type),
       validation: (rule) =>
         rule.custom((value, ctx) => {
@@ -61,7 +60,7 @@ export default defineType({
     defineField({
       name: "poster",
       title: "Poster image",
-      type: "image",
+      type: "imageWithAlt",
       description: "The still shown before the video plays.",
       hidden: ({ parent }) => !VIDEO_TYPES.includes(parent?.type),
     }),

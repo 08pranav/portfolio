@@ -36,7 +36,17 @@ export function siteSettingsDoc() {
     // empty `url` = a TODO to fill in the Studio; Sanity accepts the document, the Studio flags the field
     socials: d.site.socials.map((s) => ({ _type: "social", ...s })),
     resume: { updatedAt: resume.updatedAt, pages: resume.pages },
-    seo: { title: seo.title, titleTemplate: seo.titleTemplate, description: seo.description },
+    errorPages: d.site.errorPages,
+    seo: {
+      title: seo.title,
+      titleTemplate: seo.titleTemplate,
+      description: seo.description,
+      keywords: seo.keywords,
+      jobTitle: seo.jobTitle,
+      alumniOf: seo.alumniOf,
+      addressLocality: seo.addressLocality,
+      addressCountry: seo.addressCountry,
+    },
   });
 }
 

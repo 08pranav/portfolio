@@ -30,6 +30,7 @@ npm run lint           # ESLint
 npm run build          # production build
 npm run check:schema   # validates the Sanity schemas
 npm run check:query    # runs the content query against sample documents
+npm run check:jsonld   # checks the structured data on every page against schema.org (needs the site running)
 ```
 
 ## Environment variables
@@ -44,6 +45,6 @@ Names only; set the values in `.env.local` and in the Vercel project settings.
 | `SANITY_API_WRITE_TOKEN` | Optional: saving contact notes to the admin inbox |
 | `SANITY_REVALIDATE_SECRET` | Verifies the Sanity webhook at `/api/revalidate` |
 | `NEXT_PUBLIC_WEB3FORMS_KEY` | Sends contact form notes to my email |
-| `NEXT_PUBLIC_SITE_URL` | Optional: the public address (e.g. my custom domain), used for link-preview images |
+| `NEXT_PUBLIC_SITE_URL` | Optional: fallback public address; the main domain set in the admin takes priority |
 
 With no Sanity project configured the site still builds and renders its built-in skeleton.

@@ -1,0 +1,104 @@
+/* One project in one screen: gallery on the left, the story on the right. Used as an overlay and as a full page. */
+.case {
+  background: var(--paper); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(10px, 2vh, 22px);
+  padding: calc(14px + env(safe-area-inset-top, 0px)) var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px)); overflow: hidden;
+}
+.overlay { position: fixed; inset: 0; z-index: 70; }
+.page { min-height: 100svh; padding-top: calc(var(--navh) + 14px); }
+.bar3 { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
+.case button, .case .ctl { all: unset; cursor: pointer; font-size: 14px; }
+.case button:focus-visible, .case .ctl:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 3px; }
+.cmain { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(20px, 3vw, 52px); min-height: 0; }
+.gal { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; gap: 10px; min-height: 0; }
+.galMain { position: relative; border-radius: 10px; overflow: hidden; background: var(--card); min-height: 0; touch-action: pan-y; }
+.slide { margin: 0; position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .5s, visibility .5s; }
+.slide.on { opacity: 1; visibility: visible; }
+.slide img, .slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.galBar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.galCap { flex: 1; min-width: 0; text-align: center; }
+.thumbs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.thumbs::-webkit-scrollbar { display: none; }
+.case .thumb {
+  all: unset; box-sizing: border-box; display: block; flex: none; height: clamp(44px, 8vh, 78px); aspect-ratio: 16/10; border-radius: 5px;
+  overflow: hidden; cursor: pointer; outline: 1.5px solid transparent; outline-offset: 2px;
+  transition: outline-color .3s; position: relative;
+}
+/* the dimming is a veil over the thumbnail rather than opacity on it, so the preview inside keeps its real contrast */
+.case .thumb::after { content: ""; position: absolute; inset: 0; background: var(--paper); opacity: .55; transition: opacity .3s; pointer-events: none; }
+.case .thumb.on { outline-color: var(--ink); }
+.case .thumb.on::after { opacity: 0; }
+.case .thumb:hover::after { opacity: .15; }
+.case .thumb:focus-visible { outline-color: var(--ink); }
+.case .thumb:focus-visible::after { opacity: 0; }
+.mini { width: 300%; height: 300%; transform: scale(.3333); transform-origin: 0 0; pointer-events: none; position: absolute; left: 0; top: 0; }
+.thumbImg { position: absolute; inset: 0; }
+.thumbImg img { width: 100%; height: 100%; object-fit: cover; }
+.kind { position: absolute; z-index: 1; left: 4px; bottom: 3px; font-family: var(--mono); font-size: 8px; background: rgba(0, 0, 0, .55); color: #fff; border-radius: 3px; padding: 1px 4px; }
+
+/* stand-ins used while a media item has no file */
+.m { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.win { width: 86%; height: 84%; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .4); }
+.chrome { display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: rgba(0, 0, 0, .18); font-family: var(--mono); font-size: 10px; }
+.chrome i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .45; }
+.chrome span { margin-left: 8px; opacity: .75; }
+.pg { flex: 1; padding: 5%; display: flex; flex-direction: column; gap: 5%; min-height: 0; }
+.h { font-family: var(--serif); font-style: italic; font-variation-settings: 'SOFT' 0, 'WONK' 0; font-size: clamp(18px, 3vw, 44px); line-height: .95; }
+.row { display: flex; gap: 4%; flex: 1; min-height: 0; }
+.blk { border-radius: 6px; background: currentColor; opacity: .16; flex: 1; }
+.blk.d { opacity: .28; }
+.side { width: 22%; display: flex; flex-direction: column; gap: 8%; }
+.side b { height: 9%; border-radius: 4px; background: currentColor; opacity: .2; }
+.bars { flex: 1; display: flex; align-items: flex-end; gap: 3%; }
+.bars b { flex: 1; background: currentColor; opacity: .35; border-radius: 3px 3px 0 0; }
+.lines { display: flex; flex-direction: column; gap: 7%; flex: 1; }
+.lines b { height: 12%; border-radius: 4px; background: currentColor; opacity: .16; }
+.phone {
+  height: 86%; aspect-ratio: 9/19; border-radius: 28px; border: 6px solid rgba(0, 0, 0, .75); overflow: hidden; display: flex;
+  flex-direction: column; gap: 5%; padding: 10% 8%; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .5);
+}
+.phone .h { font-size: clamp(14px, 1.8vw, 24px); }
+.phone .lines b { height: 14%; }
+.play { all: unset; cursor: pointer; position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0, 0, 0, .18); transition: background .3s; }
+.play i { width: 72px; height: 72px; border-radius: 50%; background: rgba(255, 255, 255, .92); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); transition: transform .4s var(--ease); }
+.play i::before { content: ""; margin-left: 5px; border-left: 18px solid #111; border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+.play:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
+.playing .play { background: transparent; }
+.playing .play i { transform: scale(0); }
+.tl { position: absolute; left: 4%; right: 4%; bottom: 4%; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .35); overflow: hidden; }
+.tl b { position: absolute; inset: 0 auto 0 0; width: 0; background: #fff; }
+.playing .tl b { animation: fill 12s linear forwards; }
+.dur { position: absolute; right: 4%; bottom: calc(4% + 10px); font-family: var(--mono); font-size: 10px; color: #fff; text-shadow: 0 1px 4px rgba(0, 0, 0, .4); }
+.ptr { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #111; left: 30%; top: 40%; opacity: 0; }
+.playing .ptr { opacity: 1; animation: wander 6s var(--ease) infinite; }
+@keyframes fill { to { width: 100%; } }
+@keyframes wander { 0% { left: 30%; top: 40%; } 25% { left: 62%; top: 55%; } 50% { left: 48%; top: 30%; } 75% { left: 70%; top: 70%; } 100% { left: 30%; top: 40%; } }
+.arch { width: 88%; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 2%; }
+.node { border: 1px solid currentColor; border-radius: 10px; padding: 8% 6%; display: flex; flex-direction: column; gap: 6px; background: rgba(255, 255, 255, .06); }
+.node :global(.mono) { color: inherit; opacity: .7; }
+.node strong { font-size: clamp(13px, 1.5vw, 20px); font-weight: 600; letter-spacing: -.02em; }
+.arrowMock { font-family: var(--mono); font-size: clamp(14px, 1.6vw, 22px); }
+
+/* the story */
+.cinfo { display: flex; flex-direction: column; gap: clamp(10px, 1.9vh, 20px); min-height: 0; overflow: hidden; }
+.title { margin: 0; font-size: clamp(38px, min(5.6vw, 9vh), 96px); font-weight: 340; line-height: .9; }
+.lead { margin: 0; font-size: clamp(15px, min(1.35vw, 2.3vh), 19px); line-height: 1.4; }
+.sub { margin: 0 0 4px; font-size: 12px; font-weight: 600; }
+.s { margin: 0; color: var(--muted); font-size: clamp(13px, min(1.05vw, 1.9vh), 15px); line-height: 1.45; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.chips li { font-family: var(--mono); font-size: 11px; border: 1px solid var(--rule); border-radius: 99px; padding: 5px 10px; }
+.acts { display: flex; gap: 22px; flex-wrap: wrap; font-size: 15px; margin-top: auto; align-items: baseline; }
+.note { margin: 0; flex-basis: 100%; }
+.cfoot { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.next { font-family: var(--serif); font-style: italic; font-size: clamp(22px, min(2.6vw, 4.4vh), 38px); }
+
+@media (max-width: 860px), (max-height: 600px) {
+  .case { display: block; overflow-y: auto; overscroll-behavior: contain; }
+  .overlay { overflow-y: auto; }
+  .cmain { grid-template-columns: minmax(0, 1fr); margin-block: 16px; }
+  .galMain { aspect-ratio: 4/3; }
+  .gal { grid-template-rows: auto auto auto; }
+  .cinfo { overflow: visible; }
+  .cfoot { margin-top: 28px; }
+}
+@media (max-width: 860px), (max-height: 600px) { .page { padding-top: calc(var(--navh) + 14px); } }
+.page .cinfo { overflow: visible; }

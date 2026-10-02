@@ -8,14 +8,16 @@
   display: flex; justify-content: space-between; gap: 16px; padding: calc(var(--navh) + 2px) var(--gutter) 10px;
   border-bottom: 1px solid var(--night-rule); position: relative; z-index: 4;
 }
-.stage { position: relative; min-height: 0; }
+.stage { position: relative; min-height: 0; container-type: inline-size; }
 .wm {
   position: absolute; left: var(--gutter); right: var(--gutter); top: clamp(10px, 1.4vw, 22px); margin: 0; text-align: center;
   font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; text-transform: uppercase;
-  font-size: var(--wmfs, 28vw); line-height: .76; letter-spacing: -.004em; white-space: nowrap; z-index: 1; color: var(--chalk);
+  font-size: var(--wmfs, calc((100cqw - 2 * var(--gutter)) / var(--wmk, 3.1508) * .995)); line-height: .76; letter-spacing: -.004em; white-space: nowrap; z-index: 1; color: var(--chalk);
 }
 .ln { display: inline-block; overflow: hidden; vertical-align: top; padding-top: .02em; }
 .l { display: inline-block; will-change: transform; }
+:global(html.show-loader) .l { transform: translateY(115%); }
+:global(html.show-loader) .tilt { clip-path: inset(100% 0% 0% 0%); }
 
 .portrait {
   position: absolute; left: 50%; bottom: 0; translate: -50% 0; z-index: 2; height: var(--ph, 74%); aspect-ratio: var(--par, 1.5453);

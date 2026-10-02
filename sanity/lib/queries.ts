@@ -3,10 +3,11 @@ import { defineQuery } from "next-sanity";
 const IMG = `{ "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "lqip": asset->metadata.lqip, "hotspot": hotspot{x, y}, alt }`;
 
 const PROJECT = `{
-  _id, "slug": slug.current, year, title, urlLabel, description, built, hardest, stack, note,
+  _id, "updatedAt": _updatedAt, "slug": slug.current, year, title, urlLabel, description, built, hardest, stack, note,
   "links": links[]{label, url},
   "theme": { "background": themeBackground, "text": themeText },
   archLabels,
+  "seo": seo{ metaTitle, metaDescription, "shareImage": shareImage${IMG} },
   "media": media[]{
     type, caption, mock, duration,
     "image": image${IMG},
@@ -17,13 +18,15 @@ const PROJECT = `{
 
 /** One request for the whole page. Every document type from ADMIN.md. */
 export const CONTENT_QUERY = defineQuery(`{
+  "updatedAt": *[_type in ["siteSettings", "hero", "homepageLayout", "workSection", "aboutSection", "photosSection", "contactSection", "project", "photo"]] | order(_updatedAt desc)[0]._updatedAt,
   "site": *[_type == "siteSettings"][0]{
     fullName, logoText, email, location, timeZone,
     status{ openToWork, shortText, text },
     "socials": socials[]{ platform, url, label },
     "resume": { "url": resume.file.asset->url, "updatedAt": resume.updatedAt, "pages": resume.pages },
     defaultTheme,
-    "seo": { "title": seo.title, "titleTemplate": seo.titleTemplate, "description": seo.description, "shareImage": seo.shareImage${IMG}, "favicon": seo.favicon${IMG} }
+    errorPages,
+    "seo": { "title": seo.title, "titleTemplate": seo.titleTemplate, "description": seo.description, "keywords": seo.keywords, "canonicalDomain": seo.canonicalDomain, "jobTitle": seo.jobTitle, "alumniOf": seo.alumniOf, "addressLocality": seo.addressLocality, "addressCountry": seo.addressCountry, "shareImage": seo.shareImage${IMG}, "favicon": seo.favicon${IMG} }
   },
   "navigation": *[_type == "navigation"][0]{
     "links": links[]{ label, target }, menuFooterLeft, menuFooterRight, labels

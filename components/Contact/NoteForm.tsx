@@ -1,9 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import gsap from "gsap";
 import Roll from "@/components/ui/Roll";
-import { initMotion } from "@/lib/motion";
+import { initMotion, loadGsap } from "@/lib/motion";
 import { sendNote } from "@/lib/web3forms";
 import type { ContactSection } from "@/sanity/lib/types";
 import styles from "./NoteForm.module.css";
@@ -73,7 +72,10 @@ export default function NoteForm({ form: t, email }: Props) {
       setStatus("idle");
       el.reset();
       requestAnimationFrame(() => {
-        if (initMotion().G && doneRef.current) gsap.from(doneRef.current.children, { y: 20, opacity: 0, stagger: 0.06, duration: 0.6, ease: "expo.out" });
+        if (initMotion().G && doneRef.current) {
+          const kids = doneRef.current.children;
+          loadGsap().then(({ gsap }) => gsap.from(kids, { y: 20, opacity: 0, stagger: 0.06, duration: 0.6, ease: "expo.out" }));
+        }
         againRef.current?.focus();
       });
     } catch (err) {

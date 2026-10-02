@@ -37,14 +37,22 @@ export function resolveContent(raw: Raw): SiteContent {
   const photos = pick("photos");
 
   return {
+    updatedAt: (r as { updatedAt?: string }).updatedAt,
     site: {
       ...site,
       // a social link with no address yet is skipped, so unfinished entries never render as dead buttons
+      errorPages: { ...defaults.site.errorPages, ...(site.errorPages ?? {}) },
       socials: (site.socials ?? []).filter((x) => !!x.url),
       resume: site.resume ?? {},
       seo: {
         ...site.seo,
         titleTemplate: site.seo?.titleTemplate || defaults.site.seo.titleTemplate,
+        keywords: site.seo?.keywords ?? [],
+        canonicalDomain: site.seo?.canonicalDomain?.replace(/\/$/, "") || undefined,
+        jobTitle: site.seo?.jobTitle || defaults.site.seo.jobTitle,
+        alumniOf: site.seo?.alumniOf ?? "",
+        addressLocality: site.seo?.addressLocality ?? "",
+        addressCountry: site.seo?.addressCountry ?? "",
         shareImage: hasUrl(site.seo?.shareImage) ? site.seo.shareImage : undefined,
         favicon: hasUrl(site.seo?.favicon) ? site.seo.favicon : undefined,
       },
@@ -79,17 +87,12 @@ export const CONTENT_TAG = "sanity-content";
 const REVALIDATE_SECONDS = 60;
 
 /**
- * The whole site's content. Cached for the duration of a request (metadata and page share it).
- *  - Published site: cached, refreshed every 60s at the latest, instantly via the webhook or a live event.
- *  - Draft mode (the Studio's Presentation tool): drafts, streamed live as you type.
+ * Published content only: cached, refreshed every 60s at the latest and instantly by the webhook. Needs no request,
+ * so it works at build time (generateStaticParams, the sitemap, robots.txt).
  */
-export const getContent = cache(async (): Promise<SiteContent> => {
-  if (!live || !client) return defaults;
+export const getPublishedContent = cache(async (): Promise<SiteContent> => {
+  if (!client) return defaults;
   try {
-    if ((await draftMode()).isEnabled) {
-      const { data } = await live.sanityFetch({ query: CONTENT_QUERY, stega: false });
-      return resolveContent(data as Raw);
-    }
     const data = await client
       .withConfig({ useCdn: false, token: readToken })
       .fetch(CONTENT_QUERY, {}, { next: { revalidate: REVALIDATE_SECONDS, tags: [CONTENT_TAG] } });
@@ -101,4 +104,24 @@ export const getContent = cache(async (): Promise<SiteContent> => {
     console.error("Sanity fetch failed, rendering built-in content instead:", error);
     return defaults;
   }
+});
+
+/**
+ * The whole site's content for a page request. Cached for the duration of a request (metadata and page share it).
+ *  - Published site: as getPublishedContent.
+ *  - Draft mode (the Studio's Presentation tool): drafts, streamed live as you type.
+ */
+export const getContent = cache(async (): Promise<SiteContent> => {
+  if (!live || !client) return defaults;
+  try {
+    if ((await draftMode()).isEnabled) {
+      const { data } = await live.sanityFetch({ query: CONTENT_QUERY, stega: false });
+      return resolveContent(data as Raw);
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === "production") throw error;
+    console.error("Sanity draft fetch failed, rendering built-in content instead:", error);
+    return defaults;
+  }
+  return getPublishedContent();
 });

@@ -37,7 +37,24 @@ export const base: SiteContent = {
     socials: [],
     resume: {},
     defaultTheme: "system",
-    seo: { title: "Pranav Koradiya", titleTemplate: "%s — Pranav Koradiya", description: "" },
+    errorPages: {
+      notFoundTitle: "Page not found",
+      notFoundBody: "That address doesn't lead anywhere on this site. The page may have moved, or the link may have a typo.",
+      errorTitle: "Something went wrong",
+      errorBody: "The page failed to load. It isn't you, and trying again in a moment usually fixes it.",
+      homeLabel: "Back to the home page",
+      retryLabel: "Try again",
+    },
+    seo: {
+      title: "Pranav Koradiya",
+      titleTemplate: "%s — Pranav Koradiya",
+      description: "",
+      keywords: [],
+      jobTitle: "Software Engineer",
+      alumniOf: "",
+      addressLocality: "",
+      addressCountry: "",
+    },
   },
 
   navigation: {

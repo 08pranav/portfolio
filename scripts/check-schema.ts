@@ -27,6 +27,14 @@ for (const t of schemaTypes as unknown as Def[]) {
   t.fields?.forEach((f) => walk(f, `${t.name}.${f.name}`));
 }
 
+// ADMIN.md: alt text is required on every image. Plain `image` fields have no alt, so only imageWithAlt (and portrait) may be used.
+function noPlainImages(def: Def, path: string) {
+  if (def.type === "image" && path.split(".").length > 1 && !/^imageWithAlt\./.test(path) && !/^portrait\./.test(path)) problems.push(`${path}: plain image field, use imageWithAlt so alt text is required`);
+  def.fields?.forEach((f) => noPlainImages(f, `${path}.${f.name}`));
+  def.of?.forEach((m, i) => noPlainImages(m, `${path}[${m.name ?? i}]`));
+}
+for (const t of schemaTypes as unknown as Def[]) t.fields?.forEach((f) => noPlainImages(f, `${t.name}.${f.name}`));
+
 const compiled = Schema.compile({ name: "default", types: schemaTypes });
 const names = compiled.getTypeNames().filter((n: string) => schemaTypes.some((t) => t.name === n));
 

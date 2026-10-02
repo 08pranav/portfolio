@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { initMotion } from "@/lib/motion";
+import { afterPaint, initMotion, loadGsap } from "@/lib/motion";
 import type { ImageRef } from "@/sanity/lib/types";
 import styles from "./Hero.module.css";
 
@@ -13,6 +12,15 @@ export default function Portrait({ ref, portraits, ratio }: { ref?: React.Ref<HT
   const imgs = useRef<(HTMLImageElement | null)[]>([]);
   const cur = useRef(0);
   const busy = useRef(false);
+
+  // the other outfits are lazy so they can't compete with the first image; fetch them once the page is idle
+  useEffect(() => {
+    return afterPaint(() => {
+      (imgs.current as HTMLImageElement[]).forEach((im, i) => {
+        if (i > 0 && im) im.loading = "eager";
+      });
+    });
+  }, []);
 
   function nextOutfit() {
     if (busy.current) return;
@@ -30,20 +38,22 @@ export default function Portrait({ ref, portraits, ratio }: { ref?: React.Ref<HT
     all[next].style.zIndex = "2";
     all[prev].style.zIndex = "1";
     all[next].classList.add(styles.on);
-    gsap.fromTo(
-      all[next],
-      { clipPath: "inset(100% 0% 0% 0%)" },
-      {
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 0.7,
-        ease: "expo.inOut",
-        onComplete: () => {
-          all[prev].classList.remove(styles.on);
-          all[next].style.clipPath = "";
-          busy.current = false;
+    loadGsap().then(({ gsap }) => {
+      gsap.fromTo(
+        all[next],
+        { clipPath: "inset(100% 0% 0% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.7,
+          ease: "expo.inOut",
+          onComplete: () => {
+            all[prev].classList.remove(styles.on);
+            all[next].style.clipPath = "";
+            busy.current = false;
+          },
         },
-      },
-    );
+      );
+    });
   }
 
   return (
@@ -80,10 +90,10 @@ export default function Portrait({ ref, portraits, ratio }: { ref?: React.Ref<HT
               src={p.url}
               alt=""
               fill
-              sizes="100vw"
+              sizes="(max-width: 860px) 100vw, 70vw"
               quality={90}
               priority={i === 0}
-              loading={i === 0 ? undefined : "eager"}
+              fetchPriority={i === 0 ? "high" : "low"}
               draggable={false}
               style={{ objectFit: "contain", objectPosition: "bottom" }}
             />

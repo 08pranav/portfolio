@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import Roll from "@/components/ui/Roll";
 import ScrollLink from "@/components/ui/ScrollLink";
 import WithTime from "@/components/ui/WithTime";
 import ThemeToggle from "./ThemeToggle";
-import { initMotion, lockScroll, unlockScroll } from "@/lib/motion";
+import { initMotion, loadGsap, lockScroll, unlockScroll } from "@/lib/motion";
 import { jump } from "@/lib/scroll";
 import type { Navigation, SiteSettings } from "@/sanity/lib/types";
 import styles from "./Nav.module.css";
@@ -51,8 +50,10 @@ export default function Nav({ navigation, logoText, status }: Props) {
     lockScroll();
     setOpen(true);
     if (m.G) {
-      gsap.fromTo(el, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "expo.inOut" });
-      gsap.fromTo(el.querySelectorAll("[data-menu-word]"), { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.out", stagger: 0.05, delay: 0.3 });
+      loadGsap().then(({ gsap }) => {
+        gsap.fromTo(el, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "expo.inOut" });
+        gsap.fromTo(el.querySelectorAll("[data-menu-word]"), { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.out", stagger: 0.05, delay: 0.3 });
+      });
     }
     menuClose.current?.focus();
   }
@@ -68,7 +69,7 @@ export default function Nav({ navigation, logoText, status }: Props) {
       if (after) after();
       else menuBtn.current?.focus();
     };
-    if (m.G) gsap.to(el, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.5, ease: "expo.inOut", onComplete: done });
+    if (m.G) loadGsap().then(({ gsap }) => gsap.to(el, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.5, ease: "expo.inOut", onComplete: done }));
     else done();
   }
 
@@ -83,13 +84,13 @@ export default function Nav({ navigation, logoText, status }: Props) {
 
   return (
     <>
-      <nav ref={nav} className={styles.nav}>
+      <header ref={nav} className={styles.nav}>
         <ScrollLink href="#top" className={styles.logo} data-intro>{logoText}</ScrollLink>
-        <div className={styles.links} data-intro>
+        <nav aria-label="Primary" className={styles.links} data-intro>
           {links.map((l) => (
             <ScrollLink key={l.label + l.target} href={`#${l.target}`}><Roll text={`(${l.label})`} /></ScrollLink>
           ))}
-        </div>
+        </nav>
         <div className={styles.right} data-intro>
           {status.openToWork ? (
             <span className={styles.status}><span className={styles.dot} aria-hidden="true" />{status.shortText}</span>
@@ -99,7 +100,7 @@ export default function Nav({ navigation, logoText, status }: Props) {
             <Roll text={`(${labels.menu})`} />
           </button>
         </div>
-      </nav>
+      </header>
 
       <div ref={menu} id="menu" className={styles.menu} hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label={labels.menu}>
         <div className={styles.menuTop}>

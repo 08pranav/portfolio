@@ -1,0 +1,38 @@
+/* the project index: one row per project */
+.list { list-style: none; margin: 0; padding: 0; }
+.row {
+  position: relative; display: grid; grid-template-columns: 76px minmax(0, 1fr) minmax(0, auto) 32px; align-items: center; gap: 20px;
+  border-top: 1px solid var(--rule); padding-block: clamp(12px, 1.4vw, 20px);
+}
+.row:last-child { border-bottom: 1px solid var(--rule); }
+.row::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--ink);
+  transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease); pointer-events: none;
+}
+.row:hover::after, .row:has(.link:focus-visible)::after { transform: scaleX(1); }
+.name {
+  margin: 0; display: inline-flex; align-items: flex-start; overflow: hidden; height: 1.08em; font-size: clamp(36px, 6.2vw, 100px);
+  line-height: 1.08; letter-spacing: -.045em; font-weight: 520; transition: opacity .45s;
+}
+/* the whole row is the click target: the title link stretches over it */
+.link { display: block; }
+.link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.link:focus-visible { outline: none; }
+.rl { display: flex; flex-direction: column; transition: transform .6s var(--ease); }
+.rl span { white-space: nowrap; padding-right: .1em; }
+.rl :global(.it) { font-weight: 360; letter-spacing: -.025em; }
+.row:hover .rl, .row:has(.link:focus-visible) .rl { transform: translateY(-1.08em); }
+.list:hover .row:not(:hover) .name { opacity: .22; }
+.meta { text-align: right; display: flex; flex-direction: column; gap: 2px; max-width: 30ch; }
+.arrow { font-size: clamp(20px, 2vw, 30px); transition: transform .6s var(--ease); transform: rotate(-45deg); }
+.row:hover .arrow { transform: translate(4px, -4px) rotate(0deg); }
+
+@media (max-width: 860px) {
+  .row { grid-template-columns: 44px minmax(0, 1fr) 24px; }
+  .arrow { grid-row: 1; grid-column: 3; }
+  .meta { grid-column: 2; text-align: left; }
+  .name { height: auto; display: block; }
+  .rl { transform: none !important; }
+  .rl :global(.it) { display: none; }
+  .rl span { white-space: normal; }
+}

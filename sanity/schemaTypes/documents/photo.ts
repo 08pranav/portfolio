@@ -13,9 +13,8 @@ export default defineType({
     defineField({
       name: "image",
       title: "Photo",
-      type: "image",
-      description: "Drag the dot to choose the part of the photo that must never be cropped.",
-      options: { hotspot: true },
+      type: "imageWithAlt",
+      description: "Drag the dot to choose the part of the photo that must never be cropped, and describe what it shows.",
       validation: (rule) => rule.required().error("Upload the photo."),
     }),
     str("place", "Place", "Where it was taken, e.g. “Bandstand”. Shown on hover and in the viewer.", { required: true, max: 40 }),

@@ -1,0 +1,6 @@
+.footer {
+  background: var(--night); color: var(--chalk); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding-block: 20px calc(22px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--night-rule);
+}
+.footer :global(.mono) { color: var(--chalk-2); }
+.footer a:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 3px; }

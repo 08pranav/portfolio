@@ -72,6 +72,11 @@ function applySeed(seed: Seed): SiteContent {
       seo: {
         title: s.name,
       titleTemplate: `%s — ${s.name}`,
+      keywords: [s.name, "software engineer", "full-stack developer", "Mumbai", "React", "Flutter", "Django", "Solidity", "Ethereum", "Fr. CRCE"],
+      jobTitle: "Software Engineer",
+      alumniOf: a.education[0]?.org ?? "",
+      addressLocality: "Mumbai",
+      addressCountry: "IN",
         description: `Portfolio of ${s.name}, B.Tech Computer Engineering student at Fr. CRCE, Mumbai. Web, mobile and Ethereum projects, and Project Cell leadership.`,
       },
     },

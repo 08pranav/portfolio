@@ -34,7 +34,7 @@ export default function ThemeToggle({ className, toDark, toLight }: { className?
   }
 
   return (
-    <button type="button" className={className} onClick={toggle} aria-label="Switch colour theme">
+    <button type="button" className={className} onClick={toggle} aria-label={`${dark ? toLight : toDark}, switch colour theme`}>
       <Roll text={`(${dark ? toLight : toDark})`} />
     </button>
   );

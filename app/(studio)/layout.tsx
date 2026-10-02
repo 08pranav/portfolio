@@ -7,7 +7,7 @@ export { viewport } from "next-sanity/studio";
 /** The admin tab reads "Admin — <site name>", from the same title template as the rest of the site. */
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getContent();
-  return { ...studioMetadata, title: site.seo.titleTemplate.replace("%s", "Admin") };
+  return { ...studioMetadata, robots: { index: false, follow: false }, title: site.seo.titleTemplate.replace("%s", "Admin") };
 }
 
 /** The Studio gets its own root layout: none of the site's fonts, smooth scroll or theme script. */
