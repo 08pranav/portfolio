@@ -1,6 +1,13 @@
-.footer {
-  background: var(--night); color: var(--chalk); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
-  padding-block: 20px calc(22px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--night-rule);
+.footer { background: var(--night); color: var(--chalk); padding-inline: var(--gutter); display: flow-root; }
+.sigwrap { margin-top: clamp(64px, 9vw, 130px); overflow: hidden; border-bottom: 1px solid var(--chalk-2); line-height: 0; container-type: inline-size; }
+/* The name spans the page, ink to ink, and its baseline sits on the rule. Both come from the font's own metrics:
+   the letters start 0.045em inside the box (--siglsb), the ink is 2.496em wide (--sigk), and there is 0.036em of empty
+   space under the baseline. Sized from the container's width before any script runs, then refined to the pixel. */
+.sig {
+  display: inline-block; vertical-align: bottom; font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62;
+  font-size: var(--sigfs, calc(100cqw / var(--sigk, 2.496))); line-height: .74; letter-spacing: -.004em; color: var(--chalk);
+  white-space: nowrap; user-select: none; margin-left: calc(var(--siglsb, .045) * -1em); margin-bottom: -.036em;
 }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 20px calc(22px + env(safe-area-inset-bottom, 0px)); }
 .footer :global(.mono) { color: var(--chalk-2); }
 .footer a:focus-visible { outline: 1.5px solid var(--chalk); outline-offset: 3px; }

@@ -8,6 +8,7 @@ export default function SectionHead({
   sup,
   side,
   lines = false,
+  tight = false,
 }: {
   id: string;
   index?: string;
@@ -16,9 +17,11 @@ export default function SectionHead({
   side?: string;
   /** Put each part on its own line (the contact heading). */
   lines?: boolean;
+  /** No space below (the photo strip sits right under its heading). */
+  tight?: boolean;
 }) {
   return (
-    <div className="shead">
+    <div className="shead" style={tight ? { marginBottom: 0 } : undefined}>
       <div>
         {index ? <span className="mono idx">{index}</span> : null}
         <h2 id={id} className="sh2" data-reveal>

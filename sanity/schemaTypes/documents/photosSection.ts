@@ -13,6 +13,7 @@ export default defineType({
     str("titleCaps", "Title, capital part", "The bold capitals half of the heading, e.g. “the lens”.", { required: true, max: 24 }),
     str("caption", "Caption", "The small line on the right of the heading, e.g. the camera you shoot with.", { max: 60 }),
     str("scrollHint", "Scroll hint", "Shown under the strip on large screens, where scrolling moves the photos sideways.", { max: 24 }),
+    str("emptyNote", "Note while there are no photos", "Shown under the strip until you upload your first photo, when it shows placeholder frames. e.g. “Photos coming soon.”.", { max: 60, initialValue: "Photos coming soon." }),
     str("swipeHint", "Swipe hint", "Shown under the strip on phones and tablets.", { max: 24 }),
     defineField({
       name: "labels",

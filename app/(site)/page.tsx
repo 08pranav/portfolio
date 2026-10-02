@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Loader from "@/components/Loader/Loader";
 import Hero from "@/components/Hero/Hero";
-import NoteForm from "@/components/Contact/NoteForm";
+import AboutSection from "@/components/About/AboutSection";
+import ContactSection from "@/components/Contact/ContactSection";
+import PhotosSection from "@/components/Photos/PhotosSection";
 import SiteChrome from "@/components/SiteChrome";
 import SiteFooter from "@/components/SiteFooter";
 import RevealObserver from "@/components/ui/RevealObserver";
 import RichText from "@/components/ui/RichText";
-import SectionHead from "@/components/ui/SectionHead";
 import WorkSection from "@/components/Work/WorkSection";
 import { homeGraph, jsonLd } from "@/lib/seo";
 import { getContent } from "@/sanity/lib/content";
@@ -24,31 +25,16 @@ export default async function Home() {
   const order: SectionKey[] = layout.sections.filter((s) => s.visible).map((s) => s.section);
   const targets: SectionTarget[] = ["top", ...order.filter((s): s is Exclude<SectionKey, "hero"> => s !== "hero")];
 
-  // The About, Photos and Contact sections are still being built: for now each renders its heading and basics.
   const section = (key: SectionKey) => {
     switch (key) {
       case "work":
         return <WorkSection key={key} work={work} />;
       case "about":
-        return (
-          <section key={key} id="about" className="sect pad" aria-labelledby="about-title">
-            <SectionHead id="about-title" index={about.indexLabel} parts={[{ text: about.titleCaps, kind: "g" }, { text: about.titleItalic, kind: "it" }]} side={about.sideLabel} />
-            <p style={{ maxWidth: "46ch", fontSize: "clamp(20px, 2.4vw, 30px)", lineHeight: 1.2 }}><RichText value={about.lede} /></p>
-          </section>
-        );
+        return <AboutSection key={key} about={about} resume={site.resume} />;
       case "photos":
-        return (
-          <section key={key} id="photos" className="sect pad" aria-labelledby="photos-title" style={{ paddingBottom: 80 }}>
-            <SectionHead id="photos-title" index={photos.indexLabel} parts={[{ text: photos.titleItalic, kind: "it" }, { text: photos.titleCaps, kind: "g" }]} side={photos.caption} />
-          </section>
-        );
+        return <PhotosSection key={key} photos={photos} />;
       case "contact":
-        return (
-          <section key={key} id="contact" className="sect pad" aria-labelledby="contact-title" style={{ background: "var(--night)", color: "var(--chalk)", marginTop: "clamp(88px, 11vw, 160px)", paddingBottom: 80 }}>
-            <SectionHead id="contact-title" index={contact.indexLabel} lines parts={[{ text: contact.headingCaps, kind: "g" }, { text: contact.headingItalic, kind: "it" }]} />
-            <div style={{ maxWidth: 640 }}><NoteForm form={contact.form} email={site.email} /></div>
-          </section>
-        );
+        return <ContactSection key={key} contact={contact} site={site} />;
       default:
         return null;
     }

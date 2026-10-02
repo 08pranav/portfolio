@@ -164,6 +164,8 @@ export type PhotosSection = {
   caption: string;
   scrollHint: string;
   swipeHint: string;
+  /** Shown while there are no photos yet. */
+  emptyNote: string;
   labels: { view: string; close: string; prev: string; next: string };
   photos: Photo[];
 };

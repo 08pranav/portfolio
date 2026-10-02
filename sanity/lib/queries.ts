@@ -55,7 +55,7 @@ export const CONTENT_QUERY = defineQuery(`{
     certificationsLabel, certifications
   },
   "photos": *[_type == "photosSection"][0]{
-    indexLabel, titleItalic, titleCaps, caption, scrollHint, swipeHint, labels,
+    indexLabel, titleItalic, titleCaps, caption, scrollHint, swipeHint, emptyNote, labels,
     "photos": *[_type == "photo" && isHidden != true] | order(orderRank){
       _id, "image": image${IMG}, place, date, exif, shape
     }

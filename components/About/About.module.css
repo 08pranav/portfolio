@@ -1,0 +1,40 @@
+.lede { margin: 0; font-size: clamp(28px, 3.8vw, 58px); line-height: 1.1; letter-spacing: -.035em; font-weight: 400; max-width: 24ch; }
+.lede :global(.it) { font-size: 1.08em; letter-spacing: -.02em; }
+/* words fill in as you read; only for people (html.anim), and only once the scroll effect is ready */
+:global(html.anim) .lede[data-lede]:not([data-lede-static]) .wd { opacity: .16; }
+
+.facts {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--rule);
+  padding-top: 18px; margin: clamp(40px, 6vw, 72px) 0 0; list-style: none; padding-inline: 0;
+}
+.facts li { display: flex; flex-direction: column; gap: 6px; }
+
+.cv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(32px, 5vw, 72px); margin-top: clamp(56px, 8vw, 110px); }
+.cv > section { min-width: 0; }
+.cvHead { display: block; margin-bottom: 14px; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: minmax(0, 10ch) minmax(0, 1fr); gap: 4px 20px; border-top: 1px solid var(--rule); padding-block: 16px; }
+.row:last-child { border-bottom: 1px solid var(--rule); }
+.when { padding-top: 5px; }
+.what { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.role { margin: 0; font-size: clamp(18px, 1.7vw, 24px); line-height: 1.15; letter-spacing: -.02em; font-weight: 520; }
+.org { color: var(--muted); font-size: 15px; }
+.text { margin: 6px 0 0; color: var(--muted); font-size: 15px; line-height: 1.45; max-width: 60ch; }
+.certs { list-style: none; margin: 0; padding: 0; }
+.certs li { border-top: 1px solid var(--rule); padding-block: 14px; font-size: 15px; line-height: 1.4; }
+.certs li:last-child { border-bottom: 1px solid var(--rule); }
+.wide { grid-column: 1 / -1; }
+
+.resume {
+  all: unset; box-sizing: border-box; cursor: pointer; margin-top: 36px; display: inline-flex; flex-wrap: wrap; align-items: center;
+  gap: 6px 16px; max-width: 100%; background: var(--ink); color: var(--paper); border-radius: 99px; padding: 18px 28px;
+  font-size: 17px; font-weight: 500; will-change: transform;
+}
+.resume :global(.mono) { color: inherit; opacity: .65; }
+.resume:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 4px; }
+
+@media (max-width: 860px) {
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cv { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) { .row { grid-template-columns: minmax(0, 1fr); } .when { padding-top: 0; } }

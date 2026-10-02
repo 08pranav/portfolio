@@ -76,7 +76,7 @@ export function resolveContent(raw: Raw): SiteContent {
       education: pick("about").education ?? [],
       certifications: pick("about").certifications ?? [],
     },
-    photos: { ...photos, photos: photos.photos ?? [] },
+    photos: { ...photos, emptyNote: photos.emptyNote ?? defaults.photos.emptyNote, photos: photos.photos ?? [] },
     contact: pick("contact"),
   };
 }

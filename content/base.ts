@@ -131,6 +131,7 @@ export const base: SiteContent = {
     caption: "Shot around Bandra on a Fujifilm X-T30",
     scrollHint: "Keep scrolling",
     swipeHint: "Swipe",
+    emptyNote: "Photos coming soon.",
     labels: { view: "View", close: "Close", prev: "Prev", next: "Next" },
     // Stand-in frames so the strip can be built and previewed before real photos exist.
     // Only used when the Photos section document isn't in the dataset; real photos come from the Studio.
