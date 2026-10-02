@@ -14,7 +14,7 @@
   /* the clip window is 1.08em plus room for ascenders and descenders; the two lines sit further apart than that, so the
      other line can never peek in */
   margin: 0 0 -.14em; padding: 0 0 .14em; box-sizing: content-box;
-  display: inline-flex; align-items: flex-start; overflow: hidden; height: 1.08em; font-size: clamp(36px, 6.2vw, 100px);
+  display: inline-flex; align-items: flex-start; overflow: hidden; overflow: clip; clip-path: inset(0); contain: paint; isolation: isolate; height: 1.08em; font-size: clamp(36px, 6.2vw, 100px);
   line-height: 1.08; letter-spacing: -.045em; font-weight: 520; transition: opacity .45s;
 }
 /* the whole row is the click target: the title link stretches over it */
