@@ -1,0 +1,64 @@
+/* Design tokens, copied from the prototype :root.
+   Light-theme --muted, --chalk-2 and --err are a few shades darker than the prototype so small text clears WCAG AA (4.5:1) on every surface it sits on.
+   Layout: editorial cover hero, light middle on a 6-column grid, dark contact bookend.
+   Type: Archivo condensed for the name, Archivo for text, Fraunces italic for accents, Martian Mono for labels. */
+:root {
+  --paper: #EEEFF0; --card: #E3E5E8; --ink: #121214; --muted: #62666D; --rule: #D3D6DA; --grid: rgba(18, 18, 20, .055);
+  --night: #E4E5E7; --night-2: #D8DADD; --chalk: #121214; --chalk-2: #5B5F67; --night-rule: #CBCED3;
+  --live: #22A05A; --err: #B93803;
+  --serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --sans: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: var(--font-martian-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --gutter: clamp(16px, 2.6vw, 36px); --navh: 68px; --ease: cubic-bezier(.7, 0, .2, 1); --v: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --night: #0C0C0E; --night-2: #17171B; --chalk: #F1F0EC; --chalk-2: #8F9096; --night-rule: #2A2A2F;
+    --live: #3BB273; --err: #FF8A5B; --paper: #121316; --card: #1B1D21; --ink: #ECEDEF; --muted: #8E939B;
+    --rule: #2B2F35; --grid: rgba(236, 237, 239, .05); color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --night: #0C0C0E; --night-2: #17171B; --chalk: #F1F0EC; --chalk-2: #8F9096; --night-rule: #2A2A2F;
+  --live: #3BB273; --err: #FF8A5B; --paper: #121316; --card: #1B1D21; --ink: #ECEDEF; --muted: #8E939B;
+  --rule: #2B2F35; --grid: rgba(236, 237, 239, .05); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body {
+  margin: 0; background: var(--paper); transition: background .5s, color .5s; color: var(--ink);
+  font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: clip;
+}
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 1.5px solid currentColor; outline-offset: 3px; }
+
+/* shared type roles and layout helpers */
+.pad { padding-inline: var(--gutter); }
+.mono {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .02em; font-variation-settings: 'wdth' 87.5;
+  font-variant-numeric: tabular-nums; color: var(--muted);
+}
+.it {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0, 'opsz' 144; letter-spacing: -.01em;
+}
+.g {
+  font-family: var(--sans); font-weight: 640; text-transform: uppercase; letter-spacing: -.035em;
+  font-variation-settings: 'wdth' calc(100 + var(--v) * 25);
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@media (max-width: 860px) {
+  :root { --navh: 58px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
