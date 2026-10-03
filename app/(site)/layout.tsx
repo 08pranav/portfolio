@@ -8,7 +8,7 @@ import SiteConfigProvider from "@/components/providers/SiteConfigProvider";
 import { CONTENT_TAG, getContent } from "@/sanity/lib/content";
 import { live } from "@/sanity/lib/live";
 import { fontClassNames } from "@/lib/fonts";
-import { getSiteUrl } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site-url";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { title, titleTemplate, description, keywords, favicon } = site.seo;
   const isDraft = live ? (await draftMode()).isEnabled : false;
   return {
-    metadataBase: new URL(getSiteUrl(content)),
+    metadataBase: new URL(SITE_URL),
     // home page reads `title`; every other page (and the admin) reads the template, e.g. "Admin — Pranav Koradiya"
     title: { default: title, template: titleTemplate },
     description,

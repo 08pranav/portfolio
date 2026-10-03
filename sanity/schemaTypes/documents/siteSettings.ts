@@ -177,7 +177,7 @@ export default defineType({
           name: "canonicalDomain",
           title: "Main domain",
           type: "url",
-          description: "The one address your site should be known by, e.g. https://pranavkoradiya.com (no trailing slash, no www). Links in search results, the sitemap and link previews all use it. Leave empty until you have your own domain.",
+          description: "For reference only: the address of the live site, https://pranavv.me. The sitemap, link previews and search results take it from the NEXT_PUBLIC_SITE_URL setting in Vercel, so changing this box does not move the site.",
           validation: (rule) =>
             rule.uri({ scheme: ["https"] }).custom((value) => {
               if (!value) return true;

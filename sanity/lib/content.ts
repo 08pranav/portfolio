@@ -48,7 +48,7 @@ export function resolveContent(raw: Raw): SiteContent {
         ...site.seo,
         titleTemplate: site.seo?.titleTemplate || defaults.site.seo.titleTemplate,
         keywords: site.seo?.keywords ?? [],
-        canonicalDomain: site.seo?.canonicalDomain?.replace(/\/$/, "") || undefined,
+        
         jobTitle: site.seo?.jobTitle || defaults.site.seo.jobTitle,
         alumniOf: site.seo?.alumniOf ?? "",
         addressLocality: site.seo?.addressLocality ?? "",
