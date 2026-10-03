@@ -3,23 +3,21 @@
 .stage { display: flex; flex-direction: column; justify-content: center; gap: 28px; padding-block: 24px; }
 .photos[data-pinned] .stage { height: 100svh; padding-top: var(--navh); }
 .track {
+  /* strip height; every card is this tall and exactly as wide as its photo, so nothing is cropped */
+  --h: min(56svh, 520px);
   display: flex; align-items: center; gap: clamp(14px, 1.6vw, 24px); overflow-x: auto; scroll-snap-type: x mandatory;
   padding-inline: var(--gutter); padding-bottom: 8px; scrollbar-width: none;
 }
 .track::-webkit-scrollbar { display: none; }
-.photos[data-pinned] .track { overflow: visible; width: max-content; height: min(52svh, 520px); }
-.frame { all: unset; flex: none; position: relative; overflow: hidden; border-radius: 3px; cursor: pointer; scroll-snap-align: center; background: var(--card); }
+.photos[data-pinned] .track { --h: min(56svh, 540px); overflow: visible; width: max-content; height: var(--h); }
+/* a very wide photo that would exceed 85vw shrinks (height follows width) instead of being cut */
+.frame {
+  all: unset; flex: none; position: relative; overflow: hidden; border-radius: 3px; cursor: pointer; scroll-snap-align: center; background: var(--card);
+  height: min(var(--h), calc(85vw / var(--ar, 1))); aspect-ratio: var(--ar, 1);
+}
 .static { cursor: default; }
-.t { height: min(56svh, 520px); aspect-ratio: 4/5; }
-.w { height: min(40svh, 380px); aspect-ratio: 3/2; }
-.s { height: min(32svh, 300px); aspect-ratio: 1; }
-.photos[data-pinned] .t { height: 100%; }
-.photos[data-pinned] .w { height: 72%; }
-.photos[data-pinned] .s { height: 54%; }
-.up { align-self: flex-start; }
-.dn { align-self: flex-end; }
-.im { position: absolute; inset: 0 -12%; will-change: transform; }
-.im img { object-fit: cover; }
+.im { position: absolute; inset: 0; }
+.im img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .cap {
   position: absolute; left: 10px; bottom: 8px; right: 10px; display: flex; justify-content: space-between; gap: 8px; color: #fff;
   font-family: var(--mono); font-size: 10px; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .4s var(--ease);
@@ -32,18 +30,19 @@
 .bar i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--ink); }
 
 @media (max-width: 860px) {
-  .t { height: 52svh; } .w { height: 34svh; } .s { height: 28svh; }
-  .up, .dn { align-self: center; }
+  .track { --h: 52svh; }
 }
 
 /* lightbox */
 .box {
-  position: fixed; inset: 0; z-index: 60; background: var(--paper); display: grid; grid-template-rows: auto 1fr auto;
-  padding: calc(18px + env(safe-area-inset-top, 0px)) var(--gutter) calc(18px + env(safe-area-inset-bottom, 0px));
+  position: fixed; inset: 0; z-index: 70; background: var(--paper); display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) var(--gutter) calc(18px + env(safe-area-inset-bottom, 0px));
 }
-.boxBar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.boxStage { display: grid; place-items: center; padding-block: 18px; min-height: 0; }
-.boxImg { position: relative; width: min(100%, calc((100svh - 170px) * var(--ar, 1))); aspect-ratio: var(--ar, 1); border-radius: 3px; overflow: hidden; background: var(--card); }
+.boxBar { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 44px; }
+.box > .boxBar:first-child { padding-right: 96px; }
+.boxStage { position: relative; min-height: 0; margin-block: 12px; }
+/* the whole photo, contained: it scales to fit the screen and is never cropped */
+.boxImg { position: absolute; inset: 0; }
 .boxImg img { object-fit: contain; }
 .box button { all: unset; cursor: pointer; font-size: 14px; }
 .box button:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 3px; }

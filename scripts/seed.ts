@@ -107,7 +107,7 @@ async function main() {
 
   // TODO items: written empty, reported at the end
   for (const [i, s] of defaults.site.socials.entries()) if (!s.url) todos.push(`Site settings → Social links → ${s.platform}: add the profile link (item ${i + 1})`);
-  if (typeof seed.photos === "string") todos.push("Photos → Photos: upload real photos (image, place, date, camera settings, frame shape)");
+  if (typeof seed.photos === "string") todos.push("Photos → Photos: upload real photos (image, place, date, camera settings)");
 
   // validate every document against the real schema before writing anything
   console.log("\nValidating against the schema");

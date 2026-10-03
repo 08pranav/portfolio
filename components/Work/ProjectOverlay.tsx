@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ProjectView from "./ProjectView";
 import { useTabTitle } from "@/hooks/useTabTitle";
-import { initMotion, loadGsap, lockScroll, unlockScroll } from "@/lib/motion";
+import { initMotion, loadGsap, lockScroll, overlayClose, overlayOpen, unlockScroll } from "@/lib/motion";
 
 type ViewProps = Omit<React.ComponentProps<typeof ProjectView>, "mode" | "onClose" | "rootRef">;
 
@@ -34,6 +34,7 @@ export default function ProjectOverlay(props: ViewProps) {
     if (!el) return;
     opener.current = document.activeElement;
     lockScroll();
+    overlayOpen();
     el.querySelector<HTMLElement>("button, a")?.focus();
 
     const onKey = (e: KeyboardEvent) => {
@@ -53,6 +54,7 @@ export default function ProjectOverlay(props: ViewProps) {
     return () => {
       removeEventListener("keydown", onKey);
       unlockScroll();
+      overlayClose();
       (opener.current as HTMLElement | null)?.focus?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

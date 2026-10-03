@@ -5,7 +5,8 @@ import { monthYear } from "@/lib/format";
 import type { PhotosSection as PhotosContent } from "@/sanity/lib/types";
 import styles from "./Photos.module.css";
 
-const SHAPES: Frame["shape"][] = ["tall", "wide", "square"];
+// placeholder frames only: portrait, landscape, square
+const PLACEHOLDER_RATIOS = [0.8, 1.5, 1];
 
 /** Through the lens: real photos from the admin, or neutral placeholder frames until the first one is uploaded. */
 export default function PhotosSection({ photos }: { photos: PhotosContent }) {
@@ -22,7 +23,7 @@ export default function PhotosSection({ photos }: { photos: PhotosContent }) {
         width: p.image!.width,
         height: p.image!.height,
         hotspot: p.image!.hotspot,
-        shape: p.shape,
+        ar: p.image!.width && p.image!.height ? p.image!.width / p.image!.height : 1.5,
         caption: [place, monthYear(p.date)].filter(Boolean).join(", "),
         exif: [p.exif.aperture, p.exif.shutter, iso, p.exif.focalLength, place].filter(Boolean).join(" · "),
       };
@@ -30,7 +31,7 @@ export default function PhotosSection({ photos }: { photos: PhotosContent }) {
 
   const frames: Frame[] = real.length
     ? real
-    : base.photos.photos.slice(0, 9).map((p, i) => ({ id: `ph-${i}`, real: false, alt: "", shape: SHAPES[i % 3], caption: "", exif: "", gradient: p.gradient }));
+    : base.photos.photos.slice(0, 9).map((p, i) => ({ id: `ph-${i}`, real: false, alt: "", ar: PLACEHOLDER_RATIOS[i % 3], caption: "", exif: "", gradient: p.gradient }));
 
   return (
     <section id="photos" className={styles.photos} aria-labelledby="photos-title">

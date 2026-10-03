@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Roll from "@/components/ui/Roll";
-import { afterPaint, initMotion, loadGsap, lockScroll, unlockScroll } from "@/lib/motion";
+import { createPortal } from "react-dom";
+import { afterPaint, initMotion, loadGsap, lockScroll, overlayClose, overlayOpen, unlockScroll } from "@/lib/motion";
 import { pad } from "@/lib/format";
 import styles from "./Photos.module.css";
 
@@ -16,7 +17,8 @@ export type Frame = {
   width?: number;
   height?: number;
   hotspot?: { x: number; y: number };
-  shape: "tall" | "wide" | "square";
+  /** real width / height of the photo, so the card is exactly its shape */
+  ar: number;
   /** "Bandstand, Jan 2026" */
   caption: string;
   /** "f/2.8 · 1/500s · ISO 160 · 35mm · Bandstand" */
@@ -30,9 +32,6 @@ type Props = {
   hints: { scroll: string; swipe: string; empty: string };
 };
 
-const SHAPE: Record<Frame["shape"], string> = { tall: styles.t, wide: styles.w, square: styles.s };
-const RATIO: Record<Frame["shape"], number> = { tall: 0.8, square: 1, wide: 1.5 };
-
 export default function PhotoStrip({ frames, labels, hints }: Props) {
   const section = useRef<HTMLElement | null>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -40,6 +39,7 @@ export default function PhotoStrip({ frames, labels, hints }: Props) {
   const count = useRef<HTMLSpanElement>(null);
   const hint = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useState<number | null>(null);
+  const [opener, setOpener] = useState<HTMLElement | null>(null);
   const hasReal = frames.some((f) => f.real);
   const total = frames.length;
 
@@ -77,14 +77,11 @@ export default function PhotoStrip({ frames, labels, hints }: Props) {
             tr.removeEventListener("scroll", onScroll);
             if (hint.current) hint.current.textContent = !hasReal ? hints.empty : hints.scroll;
             const dist = () => Math.max(0, tr.scrollWidth - innerWidth);
-            const tw = gsap.to(tr, {
+            gsap.to(tr, {
               x: () => -dist(),
               ease: "none",
               scrollTrigger: { trigger: sec, start: "top top", end: () => `+=${Math.max(1, dist())}`, pin: true, scrub: 1, invalidateOnRefresh: true, onUpdate: (s) => setProgress(s.progress) },
             });
-            tr.querySelectorAll("[data-im]").forEach((im) =>
-              gsap.fromTo(im, { xPercent: -6 }, { xPercent: 6, ease: "none", scrollTrigger: { trigger: im.parentElement, containerAnimation: tw, start: "left right", end: "right left", scrub: true } }),
-            );
             return () => {
               sec.removeAttribute("data-pinned");
               gsap.set(tr, { x: 0 });
@@ -111,17 +108,18 @@ export default function PhotoStrip({ frames, labels, hints }: Props) {
     <>
       <div ref={track} className={styles.track} role="group" aria-label={hints.scroll}>
         {frames.map((f, i) => {
-          const cls = `${styles.frame} ${SHAPE[f.shape]} ${i % 2 === 0 ? styles.up : styles.dn}`;
+          const cls = styles.frame;
+          const ratio = { "--ar": f.ar } as React.CSSProperties;
           const inner = (
             <>
-              <span className={styles.im} data-im style={f.real ? undefined : { background: f.gradient }}>
+              <span className={styles.im} style={f.real ? undefined : { background: f.gradient }}>
                 {f.real && f.url ? (
                   <Image
                     src={f.url}
                     alt={f.alt}
-                    fill
-                    sizes="(max-width: 860px) 70vw, 30vw"
-                    style={f.hotspot ? { objectPosition: `${f.hotspot.x * 100}% ${f.hotspot.y * 100}%` } : undefined}
+                    width={f.width ?? 1200}
+                    height={f.height ?? Math.round(1200 / f.ar)}
+                    sizes="(max-width: 860px) 85vw, 50vw"
                     loading={i < 3 ? "eager" : "lazy"}
                   />
                 ) : null}
@@ -135,11 +133,11 @@ export default function PhotoStrip({ frames, labels, hints }: Props) {
             </>
           );
           return f.real ? (
-            <button key={f.id} type="button" className={cls} data-cursor={labels.view} aria-label={`${labels.view}: ${f.alt || f.caption}`} onClick={() => setOpen(i)}>
+            <button key={f.id} type="button" className={cls} style={ratio} data-cursor={labels.view} aria-label={`${labels.view}: ${f.alt || f.caption}`} onClick={(e) => { setOpener(e.currentTarget); setOpen(i); }}>
               {inner}
             </button>
           ) : (
-            <div key={f.id} className={`${cls} ${styles.static}`} aria-hidden="true">{inner}</div>
+            <div key={f.id} className={`${cls} ${styles.static}`} style={ratio} aria-hidden="true">{inner}</div>
           );
         })}
       </div>
@@ -148,23 +146,26 @@ export default function PhotoStrip({ frames, labels, hints }: Props) {
         <span className={styles.bar}><i ref={fill} /></span>
         <span className="mono" ref={hint}>{hasReal ? hints.scroll : hints.empty}</span>
       </div>
-      {open !== null ? <Lightbox frames={frames.filter((f) => f.real)} start={frames.filter((f) => f.real).findIndex((f) => f.id === frames[open].id)} labels={labels} onClose={() => setOpen(null)} /> : null}
+      {open !== null
+        ? createPortal(
+            <Lightbox frames={frames.filter((f) => f.real)} start={frames.filter((f) => f.real).findIndex((f) => f.id === frames[open].id)} labels={labels} opener={opener} onClose={() => setOpen(null)} />,
+            document.body,
+          )
+        : null}
     </>
   );
 }
 
-function Lightbox({ frames, start, labels, onClose }: { frames: Frame[]; start: number; labels: Props["labels"]; onClose: () => void }) {
+function Lightbox({ frames, start, labels, opener, onClose }: { frames: Frame[]; start: number; labels: Props["labels"]; opener: HTMLElement | null; onClose: () => void }) {
   const [i, setI] = useState(Math.max(0, start));
   const root = useRef<HTMLDivElement>(null);
-  const opener = useRef<Element | null>(null);
   const f = frames[i];
   const go = (d: number) => setI((n) => (n + d + frames.length) % frames.length);
-  const ratio = f.width && f.height ? f.width / f.height : RATIO[f.shape];
 
   useEffect(() => {
     const el = root.current!;
-    opener.current = document.activeElement;
     lockScroll();
+    overlayOpen();
     el.querySelector<HTMLElement>("button")?.focus();
     let alive = true;
     if (initMotion().G) {
@@ -187,19 +188,20 @@ function Lightbox({ frames, start, labels, onClose }: { frames: Frame[]; start: 
       alive = false;
       removeEventListener("keydown", onKey);
       unlockScroll();
-      (opener.current as HTMLElement | null)?.focus?.();
+      overlayClose();
+      opener?.focus?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div ref={root} className={styles.box} role="dialog" aria-modal="true" aria-label={f.alt || f.caption} data-lenis-prevent>
+    <div ref={root} className={styles.box} role="dialog" aria-modal="true" aria-label={f.alt || f.caption} data-lenis-prevent onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={styles.boxBar}>
         <span className="mono">{`${pad(i + 1, 3)} / ${pad(frames.length, 3)}`}</span>
-        <button type="button" onClick={onClose}><Roll text={`(${labels.close})`} /></button>
+        <button type="button" className="ov-close" onClick={onClose}><Roll text={`(${labels.close})`} /></button>
       </div>
-      <div className={styles.boxStage}>
-        <div className={styles.boxImg} style={{ "--ar": ratio } as React.CSSProperties}>
+      <div className={styles.boxStage} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+        <div className={styles.boxImg}>
           {f.url ? <Image key={f.id} src={f.url} alt={f.alt} fill sizes="100vw" priority /> : null}
         </div>
       </div>

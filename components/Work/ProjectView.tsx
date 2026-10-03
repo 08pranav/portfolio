@@ -96,7 +96,7 @@ export default function ProjectView({ project: p, index, total, next, labels, mo
       <div className={styles.bar3}>
         <span className="mono">{`(${p.year})  ${two(index + 1)} / ${two(total)}`}</span>
         {onClose ? (
-          <button type="button" onClick={onClose}><Roll text={`(${labels.close})`} /></button>
+          <button type="button" className="ov-close" onClick={onClose}><Roll text={`(${labels.close})`} /></button>
         ) : (
           <Link href="/#work" className="ctl"><Roll text={`(${labels.close})`} /></Link>
         )}

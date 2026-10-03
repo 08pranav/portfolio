@@ -45,30 +45,14 @@ export default defineType({
         str("focalLength", "Focal length", "e.g. “35mm”.", { max: 10 }),
       ],
     }),
-    defineField({
-      name: "shape",
-      title: "Frame shape",
-      type: "string",
-      description: "How the photo is framed in the strip: tall (portrait), wide (landscape) or square.",
-      options: {
-        layout: "radio",
-        list: [
-          { title: "Tall", value: "tall" },
-          { title: "Wide", value: "wide" },
-          { title: "Square", value: "square" },
-        ],
-      },
-      initialValue: "tall",
-      validation: (rule) => rule.required(),
-    }),
     bool("isHidden", "Hide this photo", "On keeps the photo in the Studio but removes it from the site.", { initialValue: false }),
   ],
   orderings: [{ title: "Manual order", name: "manual", by: [{ field: "orderRank", direction: "asc" }] }],
   preview: {
-    select: { title: "place", date: "date", shape: "shape", hidden: "isHidden", media: "image" },
-    prepare: ({ title, date, shape, hidden, media }) => ({
+    select: { title: "place", date: "date", hidden: "isHidden", media: "image" },
+    prepare: ({ title, date, hidden, media }) => ({
       title,
-      subtitle: [date, shape, hidden ? "hidden" : ""].filter(Boolean).join(" · "),
+      subtitle: [date, hidden ? "hidden" : ""].filter(Boolean).join(" · "),
       media,
     }),
   },

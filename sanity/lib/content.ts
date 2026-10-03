@@ -81,7 +81,6 @@ export function resolveContent(raw: Raw): SiteContent {
         ...p,
         // a photo with no camera details has no exif object at all; the page expects one
         exif: p.exif ?? {},
-        shape: p.shape ?? "tall",
         date: p.date ?? "",
         place: p.place ?? "",
       })),

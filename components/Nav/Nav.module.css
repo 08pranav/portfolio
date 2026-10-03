@@ -10,6 +10,8 @@
   -webkit-backdrop-filter: blur(10px); color: var(--ink);
 }
 .hide { transform: translateY(-110%); }
+/* a lightbox or project overlay is open: the nav fades out and can't be clicked */
+:global(html[data-overlay]) .nav { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s, visibility 0s .25s; }
 .logo {
   font-family: var(--sans); font-weight: 800; font-variation-settings: 'wdth' 62; font-size: 24px;
   letter-spacing: .01em; text-transform: uppercase;

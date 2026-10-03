@@ -22,9 +22,11 @@ export default function WorkSection({ work }: { work: WorkContent }) {
             <span className="mono">{p.year}</span>
             <h3 className={styles.name}>
               <Link href={`/projects/${p.slug}`} scroll={false} className={styles.link}>
-                <span className={styles.rl}>
-                  <span>{p.title}</span>
-                  <span className="it" aria-hidden="true">{p.title}</span>
+                <span className={styles.clip}>
+                  <span className={styles.rl}>
+                    <span>{p.title}</span>
+                    <span className="it" aria-hidden="true">{p.title}</span>
+                  </span>
                 </span>
               </Link>
             </h3>

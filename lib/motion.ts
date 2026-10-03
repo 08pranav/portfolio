@@ -97,3 +97,12 @@ export function unlockScroll() {
     document.documentElement.style.overflow = "";
   }
 }
+
+/** While a full-screen overlay (lightbox, project) is open the nav steps aside: html[data-overlay] hides it. */
+let overlays = 0;
+export function overlayOpen() {
+  if (overlays++ === 0) document.documentElement.setAttribute("data-overlay", "");
+}
+export function overlayClose() {
+  if (overlays > 0 && --overlays === 0) document.documentElement.removeAttribute("data-overlay");
+}

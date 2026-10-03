@@ -28,9 +28,9 @@ const dataset = [
   { ...(contactSectionDoc() as object), _id: "contactSection" },
   ...projects,
   { ...(workSectionDoc([projects[1]._id as string, projects[0]._id as string]) as object), _id: "workSection" },
-  { _id: "photo-a", _type: "photo", orderRank: "0|a:", place: "Bandstand", date: "2026-01-15", shape: "tall", image: { ...ref("img-photo-a"), hotspot: { x: 0.3, y: 0.7 } }, exif: { aperture: "f/2.8", iso: 160 } },
-  { _id: "photo-b", _type: "photo", orderRank: "0|b:", place: "Hidden one", date: "2026-01-15", shape: "wide", image: ref("img-photo-a"), isHidden: true },
-  { _id: "photo-c", _type: "photo", orderRank: "0|0:", place: "First by rank", date: "2025-12-01", shape: "square", image: ref("img-photo-a") },
+  { _id: "photo-a", _type: "photo", orderRank: "0|a:", place: "Bandstand", date: "2026-01-15", image: { ...ref("img-photo-a"), hotspot: { x: 0.3, y: 0.7 } }, exif: { aperture: "f/2.8", iso: 160 } },
+  { _id: "photo-b", _type: "photo", orderRank: "0|b:", place: "Hidden one", date: "2026-01-15", image: ref("img-photo-a"), isHidden: true },
+  { _id: "photo-c", _type: "photo", orderRank: "0|0:", place: "First by rank", date: "2025-12-01", image: ref("img-photo-a") },
   ...[0, 1, 2, 3].map((i) => asset(`img-portrait-${i}`, 1600, 1000)),
   asset("img-photo-a", 3000, 2000),
 ];

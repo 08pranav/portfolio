@@ -4,6 +4,7 @@
   padding: calc(14px + env(safe-area-inset-top, 0px)) var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px)); overflow: hidden;
 }
 .overlay { position: fixed; inset: 0; z-index: 70; }
+.overlay .bar3 { min-height: 44px; padding-right: 96px; }
 .page { min-height: 100svh; padding-top: calc(var(--navh) + 14px); }
 .bar3 { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
 .case button, .case .ctl { all: unset; cursor: pointer; font-size: 14px; }

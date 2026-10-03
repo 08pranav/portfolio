@@ -152,7 +152,6 @@ export type Photo = {
   /** ISO date, shown as "Jan 2026". */
   date: string;
   exif: { aperture?: string; shutter?: string; iso?: number; focalLength?: string };
-  shape: "tall" | "wide" | "square";
   /** Stand-in gradient, only used by the built-in defaults. */
   gradient?: string;
 };
