@@ -8,6 +8,7 @@ import SiteConfigProvider from "@/components/providers/SiteConfigProvider";
 import { CONTENT_TAG, getContent } from "@/sanity/lib/content";
 import { live } from "@/sanity/lib/live";
 import { fontClassNames } from "@/lib/fonts";
+import { shareImage } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site-url";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
@@ -17,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { site } = content;
   const { title, titleTemplate, description, keywords, favicon } = site.seo;
   const isDraft = live ? (await draftMode()).isEnabled : false;
+  const share = shareImage(content);
   return {
     metadataBase: new URL(SITE_URL),
     // home page reads `title`; every other page (and the admin) reads the template, e.g. "Admin — Pranav Koradiya"
@@ -32,13 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: site.fullName,
       url: "/",
       locale: "en_IN",
-      images: [{ url: "/share.png", width: 1200, height: 630, alt: site.fullName }],
+      images: [share],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/share.png"] },
+    twitter: { card: "summary_large_image", title, description, images: [share] },
     // no custom icon uploaded: the built-in PK icons (app/icon.svg, favicon.ico, apple-icon.png) apply
     icons: favicon ? { icon: "/site-icon" } : undefined,
     // previews of unpublished drafts must never be indexed
-    robots: isDraft ? { index: false, follow: false } : undefined,
+    robots: isDraft ? { index: false, follow: false } : { index: true, follow: true, "max-image-preview": "large" },
   };
 }
 

@@ -193,7 +193,7 @@ export default defineType({
           name: "shareImage",
           title: "Share image",
           type: "imageWithAlt",
-          description: "The picture shown when the home page link is shared on WhatsApp, LinkedIn, X and similar. Use exactly 1200 × 630 pixels; other shapes are cropped to fit.",
+          description: "The picture shown when the home page link is shared on WhatsApp, LinkedIn, X and similar. It is also the thumbnail Google shows for the site. Use exactly 1200 × 630 pixels; other shapes are cropped to fit, and transparent areas are filled with the page colour.",
         }),
         defineField({
           name: "favicon",

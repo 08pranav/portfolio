@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
 import { proxyImage } from "@/lib/proxy-image";
+import { shareImageSource } from "@/lib/seo";
 import { getContent } from "@/sanity/lib/content";
 
 const size = { width: 1200, height: 630 };
@@ -20,7 +21,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
   if (!project) return new Response("Not found", { status: 404 });
 
   const shared = project.seo?.shareImage?.url;
-  if (shared) return proxyImage(request, `${shared}?w=1200&h=630&fit=crop`, "/share-default.png");
+  if (shared) return proxyImage(request, shareImageSource(shared), "/share-default.jpg");
 
   const [masthead, serif] = await Promise.all([
     readFile(path.join(process.cwd(), "lib/og-fonts/Archivo-Masthead.ttf")),
