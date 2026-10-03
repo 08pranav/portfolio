@@ -76,7 +76,16 @@ export function resolveContent(raw: Raw): SiteContent {
       education: pick("about").education ?? [],
       certifications: pick("about").certifications ?? [],
     },
-    photos: { ...photos, emptyNote: photos.emptyNote ?? defaults.photos.emptyNote, photos: photos.photos ?? [] },
+    photos: { ...photos, emptyNote: photos.emptyNote ?? defaults.photos.emptyNote,
+      photos: (photos.photos ?? []).map((p) => ({
+        ...p,
+        // a photo with no camera details has no exif object at all; the page expects one
+        exif: p.exif ?? {},
+        shape: p.shape ?? "tall",
+        date: p.date ?? "",
+        place: p.place ?? "",
+      })),
+    },
     contact: pick("contact"),
   };
 }

@@ -27,7 +27,7 @@
 }
 
 * { box-sizing: border-box; }
-html { background: var(--night); }
+html { background: var(--night); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; /* stop phones from re-enlarging text while scrolling */ }
 body {
   margin: 0; background: var(--paper); transition: background .5s, color .5s; color: var(--ink);
   font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: clip;
@@ -74,7 +74,7 @@ html.show-loader [data-intro] { opacity: 0; transform: translateY(18px); }
 .sh2 { margin: 0; font-size: clamp(44px, 8.2vw, 132px); line-height: .88; font-weight: 400; }
 .sh2 .ln { display: inline-block; overflow: hidden; padding: 0 .1em .24em 0; margin-bottom: -.16em; vertical-align: bottom; }
 .sh2 .w { display: inline-block; }
-.sh2 .it { font-size: 1.06em; padding-left: .04em; }
+.sh2 .it { font-size: 1.06em; padding-left: .04em; white-space: nowrap; }
 .sh2 sup { font-family: var(--mono); font-size: 12px; font-variation-settings: 'wdth' 87.5; color: var(--muted); vertical-align: top; margin-left: .4em; letter-spacing: 0; }
 /* headings rise out of their masks, but only for people: the content is always in the HTML and visible to crawlers */
 html.anim [data-reveal] .w { transform: translateY(110%); transition: transform 1.1s var(--ease); }
